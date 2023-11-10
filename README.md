@@ -6,4 +6,4 @@ Project Estimator is tool for an IT company. When a client presents a project id
 
 This is quick intro, full version here:
 
-- [📚 Table of content](./doc/INDEX)
+- [📚 Table of content](./doc/INDEX.md)
