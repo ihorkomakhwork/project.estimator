@@ -9,4 +9,5 @@
 - #### [🧾 Proposals](./PROPOSALS.md)
 - #### [👥 Participants](./PARTICIPANTS.md)
 - #### [💼 Positions](./POSITIONS.md)
+- #### [⛔ Errors](./ERRORS.md)
 
