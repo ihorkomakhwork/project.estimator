@@ -38,19 +38,19 @@ Content-Type: application/json
 ```json
 {
   "status": 200,
-  "MESSAGE": "OK",
+  "message": "Ok",
   "positions": [
     {
       "id": 1,
-      "areaID": 1,
-      "levelId": 2,
-      "specializationId": 1,
+      "area": "Development",
+      "level": "Junior",
+      "specialization": "Back-end",
     },
     {
       "id": 2,
-      "areaID": 2,
-      "levelId": 4,
-      "specializationId": 4,
+      "area": "Management",
+      "level": "Senior",
+      "specialization": "Project Manager",
     },
   ],
 }
@@ -81,12 +81,14 @@ Content-Type: application/json
 ```json
 {
   "status": 200,
-  "message": "OK",
+  "message": "Ok",
   "position": {
-    "id": 1,
-    "areaID": 1,
-    "levelId": 2,
-    "specializationId": 1,
+    {
+      "id": 1,
+      "area": "Development",
+      "level": "Junior",
+      "specialization": "Back-end",
+    }
   }
 }
 ```
@@ -109,9 +111,10 @@ Content-Type: application/json
 ```
 ```json
 {
-  "areaID": 1,
-  "levelId": 2,
-  "specializationId": 1,
+      "id": 1,
+      "area": "Development",
+      "level": "Junior",
+      "specialization": "Back-end",
 }
 ```
 
@@ -149,9 +152,7 @@ Content-Type: application/json
 ```
 ```json
 {
-  "areaID": 1,
-  "levelId": 2,
-  "specializationId": 1,
+  "level": "Middle",
 }
 ```
 
@@ -197,177 +198,3 @@ Content-Type: application/json
   "message": "Position was deleted",
 }
 ```
-
-### `GET /positions/areas`
-------------------------------------------------------------------
-
-##### Description
-
-Get list of all areas.
-
-###### Example Request
-
-```http
-GET /positions/areas HTTP/1.1
-Host: api.example.com
-Cookie: access_token=<access_token>
-```
-
-###### Example Response
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-... other headers
-```
-```json
-{
-  "status": 200,
-  "message": "Ok",
-  "areas": [
-    {
-      "id": 1,
-      "type": "Management",
-    },
-    {
-      "id": 2,
-      "name": "Development",
-    },
-  ],
-}
-```
-
-### `GET /positions/levels`
-------------------------------------------------------------------
-
-##### Description
-
-Get area by id.
-
-###### Example Request
-
-```http
-GET /positions/levels HTTP/1.1
-Host: api.example.com
-Cookie: access_token=<access_token>
-```
-
-###### Example Response
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-... other headers
-```
-```json
-{
-  "status": 200,
-  "message": "Ok",
-  "levels": [
-    {
-     "id": 1,
-        "name": "Trainee",   
-    },
-    {
-      "id": 2,
-      "name": "Junior",
-    },
-    {
-      "id": 3,
-      "name": "Middle",
-    },
-    {
-        "id": 4,
-        "name": "Senior",
-    },
-    {
-        "id": 5,
-        "name": "Lead",
-    },
-    {
-        "id": 6,
-        "name": "C-Level",
-    }
-  ]
-}
-```
-
-### `GET /positions/specializations`
-------------------------------------------------------------------
-
-##### Description
-
-Get list of all specializations.
-
-###### Example Request
-
-```http
-GET /positions/specializations HTTP/1.1
-Host: api.example.com
-Cookie: access_token=<access_token>
-```
-
-###### Example Response
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-... other headers
-```
-```json
-{
-  "status": 200,
-  "message": "Ok",
-  "specializations": [
-    {
-      "id": 1,
-      "name": "Frontend",
-    },
-    {
-      "id": 2,
-      "name": "Backend",
-    },
-    {
-      "id": 3,
-      "name": "Fullstack",
-    },
-    {
-      "id": 4,
-      "name": "QA",
-    },
-    {
-      "id": 5,
-      "name": "DevOps",
-    },
-    {
-      "id": 6,
-      "name": "UI/UX",
-    },
-    {
-      "id": 7,
-      "name": "Project Manager",
-    },
-    {
-      "id": 8,
-      "name": "Business Analyst",
-    },
-    {
-      "id": 9,
-      "name": "Sales Manager",
-    },
-    {
-      "id": 10,
-      "name": "HR",
-    },
-    {
-      "id": 11,
-      "name": "Marketing",
-    },
-    {
-      "id": 12,
-      "name": "CEO",
-    }
-  ]
-}
-```
-
