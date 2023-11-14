@@ -5,5 +5,5 @@
 - Use the command in terminal: 
 
 ```bash 
-docker-compose up
+docker-compose up --build
 ```
