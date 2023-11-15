@@ -28,20 +28,20 @@ INSERT INTO Positions (type, level, name)
 VALUES ('developer', 'junior', 'frontend');
 
 INSERT INTO Positions (type, level, name)
-VALUES ('manager', 'junior', 'team-lead');
+VALUES ('manager', 'junior', 'project-manager');
 
 INSERT INTO Positions (type, level, name)
 VALUES ('developer', 'senior', 'full-stack');
 
 INSERT INTO Positions (type, level, name)
-VALUES ('manager', 'middle', 'product-manager');
+VALUES ('manager', 'middle', 'project-manager');
 
 -- Seed data for Customers table
 INSERT INTO Customers (user_id, license)
 VALUES (1, 'pe');
 
 INSERT INTO Customers (user_id, license)
-VALUES (3, 'ee');
+VALUES (3, 'le');
 
 INSERT INTO Customers (user_id, license)
 VALUES (5, 'pe');
@@ -64,7 +64,7 @@ INSERT INTO Proposals (title, content, budget, customer_id, state)
 VALUES ('Mobile App Development', 'We need a mobile app for our business', 15000, 3, 'pending');
 
 INSERT INTO Proposals (title, content, budget, customer_id, state)
-VALUES ('E-commerce Website', 'We need an online store for our products', 20000, 5, 'pending');
+VALUES ('E-commerce Website', 'We need an online store for our products', 20000, 2, 'pending');
 
 -- Seed data for ProjectsEstimations table
 INSERT INTO ProjectsEstimations (responsible_employee_id, proposal_id, cost, state, message)
@@ -78,20 +78,20 @@ VALUES (3, 3, 18000, 'processing', 'We can complete this project within 4 months
 
 -- Seed data for Tasks table
 INSERT INTO Tasks (project_estimation_id, employee_id, estimate, description)
-VALUES (1, 2, '10 hours', 'Design homepage layout');
+VALUES (1, 3, '10 hours', 'Design homepage layout');
 
 INSERT INTO Tasks (project_estimation_id, employee_id, estimate, description)
-VALUES (2, 4, '60 hours', 'Develop mobile app UI');
+VALUES (2, 2, '60 hours', 'Develop mobile app UI');
 
 INSERT INTO Tasks (project_estimation_id, employee_id, estimate, description)
-VALUES (3, 6, '20 hours', 'Create online store layout');
+VALUES (3, 1, '20 hours', 'Create online store layout');
 
 -- Seed data for InvolvedEmployees table
 INSERT INTO InvolvedEmployees (project_estimation_id, employee_id)
-VALUES (1, 2);
+VALUES (1, 1);
 
 INSERT INTO InvolvedEmployees (project_estimation_id, employee_id)
-VALUES (2, 4);
+VALUES (2, 2);
 
 INSERT INTO InvolvedEmployees (project_estimation_id, employee_id)
-VALUES (3, 6);
+VALUES (3, 3);

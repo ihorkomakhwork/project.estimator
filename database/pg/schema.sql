@@ -4,7 +4,7 @@ CREATE TYPE position_type AS ENUM('manager', 'developer');
 
 CREATE TYPE position_level AS ENUM('trainee', 'junior', 'middle', 'senior', 'lead', 'c-level');
 
-CREATE TYPE specialization_type AS ENUM('frontend', 'backend', 'fullstack', 'qa', 'devops', 'designer', 'project-manager', 'cto', 'ceo');
+CREATE TYPE specialization_type AS ENUM('frontend', 'backend', 'full-stack', 'qa', 'devops', 'designer', 'project-manager', 'cto', 'ceo');
 
 CREATE TYPE license_type AS ENUM('pe', 'le');
 
