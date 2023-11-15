@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node-app
+    environment:
+      - NODE_ENV=development
+    container_name: node-app-container
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:latest  
+    container_name: postgres-container
+    volumes:
+      #- db:/var/lib/postgresql/data
+        - ./database/pg/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+        - ./database/pg/seed.sql:/docker-entrypoint-initdb.d/2-seed.sql
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: DBEstimator
+
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6379:6379"
