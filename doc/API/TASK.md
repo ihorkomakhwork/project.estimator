@@ -122,7 +122,7 @@ Content-Type: application/json
   "title": "Authorization",
   "customerId": 20,
   "projecEstimationId": 1,
-  "estimate" : "06:00:00",
+  "estimate" : "6 d",
   "description": "JWT authorization with access 1 token",
 }
 ```

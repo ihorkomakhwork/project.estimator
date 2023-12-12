@@ -111,7 +111,6 @@ Content-Type: application/json
 ```
 ```json
 {
-      "id": 1,
       "area": "Development",
       "level": "Junior",
       "specialization": "Back-end",

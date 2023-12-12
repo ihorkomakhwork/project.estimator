@@ -20,7 +20,7 @@ This is couple of routes related with users. Access to this route can have only 
 | Property    | Type   | Description                   |
 |-------------|--------|-------------------------------|
 | `role`    | string | We can sort by role `admin`, `employee` or `customer` |
-| `specialityId` | number | We can sort by speciality id |
+| `positionId` | number | We can sort by speciality id |
 | `email` | string | We can sort by email |
 | `country` | string | We can sort by country |
 | `name` | string | We can sort by name |
@@ -59,9 +59,9 @@ Content-Type: application/json
       "country": "Bulgaria",   
       "city": "Sofia",
       "address": "ul. Vasil Levski 12",
-      "role": { 
-        "type": "employee",
-        "specialityId": 1,
+      "role": "employee",
+      "roleInfo": { 
+        "positionId": 1,
         "salary": 10000
       }
     },
@@ -74,9 +74,10 @@ Content-Type: application/json
       "country": "OAE",
       "city": "Dubai",
       "address": "Sheik Zayed Road 1",
-      "role": { 
+      "role": "employee",
+      "roleInfo": { 
         "type": "employee",
-        "specialityId": 2,
+        "positionId": 2,
         "salary": 10000
       }
   },
@@ -90,7 +91,8 @@ Content-Type: application/json
     "country": "Bulgaria",   
     "city": "Sofia",
     "address": "ul. Vasil Levski 12",
-    "role": { 
+    "role": "admin",
+    "roleInfo": { 
       "type": "admin",
       }
   },
@@ -128,9 +130,11 @@ Content-Type: application/json
  "country": "Bulgaria",   
  "city": "Sofia",
  "address": "ul. Vasil Levski 12",
- "role": { 
-    "type": "employee",
-    "specialityId": 1,
+ "role": "employee",
+
+ "roleInfo": { 
+    "available": true,
+    "positionId": 1,
     "salary": 10000
   }
 }
@@ -163,9 +167,9 @@ Creation Employee type with manager speciality.
  "country": "Bulgaria",   
  "city": "Sofia",
  "address": "ul. Vasil Levski 12",
- "role": { 
-    "type": "employee",
-    "specialityId": 1,
+ "role": "employee",
+ "roleInfo": { 
+    "positionId": 1,
     "salary": 10000
   }
 }
@@ -180,9 +184,9 @@ Creation Employee type with developer speciality.
  "country": "OAE",
  "city": "Dubai",
  "address": "Sheik Zayed Road 1",
- "role": { 
-    "type": "employee",
-    "specialityId": 2,
+ "role": "employee",
+ "roleInfo": { 
+    "positionId": 2,
     "salary": 10000
   }
 }
@@ -199,9 +203,8 @@ Creation Admin type.
  "country": "Bulgaria",   
  "city": "Sofia",
  "address": "ul. Vasil Levski 12",
- "role": { 
-    "type": "admin",
-  }
+ "role": "employee",
+ "roleInfo": {}
 }
 ```
 

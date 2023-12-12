@@ -43,15 +43,15 @@ Content-Type: application/json
     "participants": [
         {
             "employeeId": 1,
-            "estimation": 1
+            "estimationId": 1
         },
         {
             "employeeId": 2,
-            "estimation": 1
+            "estimationId": 1
         },
         {
             "employeeId": 3,
-            "estimation": 1
+            "estimationId": 1
         
         } 
     ]
@@ -86,7 +86,7 @@ Content-Type: application/json
     "message": "Ok",
     "participant": {
         "employeeId": 1,
-        "estimation": 1
+        "estimationId": 1
     }
 }
 ```
@@ -111,7 +111,7 @@ Content-Type: application/json
 ```json
 {
     "employeeId": 1,
-    "estimation": 1
+    "estimationId": 1
 }
 ```
 ###### Example Response
@@ -148,7 +148,7 @@ Content-Type: application/json
 ```json
 {
     "employeeId": 1,
-    "estimation": 2
+    "estimationId": 2
 }
 ```
 ###### Example Response
