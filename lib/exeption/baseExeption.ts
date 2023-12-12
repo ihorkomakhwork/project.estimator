@@ -1,4 +1,4 @@
-export default abstract class Exeption extends Error {
+export default abstract class BaseExeption extends Error {
     constructor(
         public code: number,
         public message: string,

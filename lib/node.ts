@@ -5,8 +5,19 @@ import * as crypto from 'node:crypto';
 import * as url from 'node:url';
 import * as fsp from 'node:fs/promises';
 import * as events from 'node:events';
+import * as assert from 'node:assert';
 
-const node = { process, path, http, util, crypto, fsp, url, events };
+const node = {
+    process,
+    path,
+    http,
+    util,
+    crypto,
+    fsp,
+    url,
+    events,
+    assert,
+};
 
 Object.freeze(node);
 

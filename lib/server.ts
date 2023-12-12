@@ -1,11 +1,10 @@
-import error from './error/error';
+import exeption from './exeption/exeption';
 import transports from './transport';
 import type {
     IApplication,
     IServer,
     FHook,
     IReq,
-    IEntity,
     IEndpoint,
     IHooks,
     IReqArgs,
@@ -27,6 +26,7 @@ class Chain {
             const pipe = hook(payload);
             chain.push(pipe);
         }
+        console.log(chain);
         Promise.all(chain);
     }
 }
@@ -41,10 +41,10 @@ export default class Server implements IServer {
         const transport = transports[protocol];
         // const hasAppHooks = this.application.has('appHooks');
         // if (hasAppHooks) this.appHooks = this.application.appHooks;
+        transport(port, this.reqHandler.bind(this));
         this.application.logger.info(
             `${protocol.toLocaleUpperCase()} Server listen port: ${port}`,
         );
-        transport(port, this.reqHandler.bind(this));
     }
 
     async reqHandler(req: IReq) {
@@ -53,9 +53,13 @@ export default class Server implements IServer {
             const data: IReqArgs = Object.values(req) as IReqArgs;
             const [client, socket, procedure, path, id, payload] = data;
             this.application.createContext({ client });
-            this.application.logger.info(
-                `====== socket: ${socket.remoteAddress}, path: ${path} procedure: ${procedure},id: ${id}, payload: '${payload} ====== `,
-            );
+            this.application.logger.info({
+                socket: socket.remoteAddress,
+                path,
+                procedure,
+                id,
+                payload,
+            });
             const entity = this.getEntity(path);
             const endpoint = this.getEndpoint(entity, procedure);
             if (payload) {
@@ -64,14 +68,14 @@ export default class Server implements IServer {
             }
             const hasId = this.hasMethodId(endpoint.method);
             if (hasId) args.push(id);
-            const result = await endpoint.method(...args);
+            const result = await endpoint.method.call(entity, ...args);
             this.application.logger.info('result', result);
             const code = result.code || 200;
             const message = result.message || 'Ok';
             if (!result.code) return { ...result, code, message };
             return result;
         } catch (error) {
-            return this.application.errorFilter.global(error);
+            return this.application.globalErrorFilter(error);
         }
     }
 
@@ -80,14 +84,14 @@ export default class Server implements IServer {
         const signature = src.substring(0, src.indexOf(')'));
         return signature.includes('id');
     }
-    getEntity(path: string): IEntity {
-        if (!this.application.has(path)) throw new error.api.NotFound();
-        const entity: IEntity = this.application[path];
+    getEntity(path: string) /* : IController */ {
+        if (!this.application.has(path)) throw new exeption.api.NotFound();
+        const entity /* : IController */ = this.application[path];
         return entity;
     }
-    getEndpoint(entity: IEntity, method: string): IEndpoint {
+    getEndpoint(entity /* : IController */, method: string): IEndpoint {
         const endpoint = entity[method];
-        if (!endpoint) throw new error.api.NotFound('Not Found', 404);
+        if (!endpoint) throw new exeption.api.NotFound('Not Found', 404);
         const isFunction = typeof endpoint === 'function';
         if (isFunction) return { method: endpoint };
         return endpoint;
@@ -95,7 +99,7 @@ export default class Server implements IServer {
 
     async preValidate(
         payload,
-        entity: IEntity,
+        entity /*: IController*/,
         endpoint: IEndpoint,
     ): Promise<void> {
         const appHooks = this.appHooks?.prev ? this.appHooks.prev : [];

@@ -126,6 +126,15 @@ POST /proposals HTTP/1.1
 Host: api.example.com
 Cookie: access_token=<access_token>
 ```
+```json
+{
+  "title": "Some automation APP",
+  "customerId": 123,
+  "state": "pending",
+  "content": "Some discription of ammazing app"
+}
+```
+
 ###### Example Response
 
 ```http

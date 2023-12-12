@@ -20,7 +20,7 @@ Cookie: access_token=<access_token>
 
 ### Endpoints
 
-### `POST /auth/signup`
+### `POST /auth/registration`
 ------------------------------------------------------------------
 
 ##### Description

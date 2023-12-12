@@ -1,4 +1,4 @@
-import Exeption from './exeption';
+import Exeption from './baseExeption';
 
 class NotFound extends Exeption {
     constructor(
@@ -20,4 +20,14 @@ class BadRequest extends Exeption {
     }
 }
 
-export default { NotFound, BadRequest };
+class Unauthorized extends Exeption {
+    constructor(
+        public message: string = 'Unauthorized',
+        public code: number = 401,
+        public options = {},
+    ) {
+        super(code, message, options);
+    }
+}
+
+export default { NotFound, BadRequest, Unauthorized };

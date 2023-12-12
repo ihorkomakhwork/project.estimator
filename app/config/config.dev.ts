@@ -13,24 +13,15 @@ const config: IConfig = {
             pathPattern: '/**/!(*.spec|*.d|*.test)*.{js,ts}',
         },
     },
-    auth: {
-        strategy: 'jwt',
-        secret: 'secret',
-        tokens: {
-            access: {
-                expiresIn: '1m',
-            },
-            refresh: {
-                expiresIn: '1h',
-            },
-        },
-    },
     db: {
         host: 'postgres-container',
         port: 5432,
         database: 'DBEstimator',
         user: 'postgres',
         password: 'postgres',
+    },
+    chache: {
+        url: 'redis://redis-container:6379',
     },
     log: {
         transport: {
@@ -39,6 +30,9 @@ const config: IConfig = {
         options: {
             colorize: true,
         },
+    },
+    auth: {
+        secret: 'secret',
     },
 };
 
