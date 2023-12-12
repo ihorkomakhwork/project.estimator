@@ -37,27 +37,17 @@ const formatRoute = (name: string, discriptor: ModuleDescriptor): any => {
 
 const format = (dir) => (name) => name + dir;
 
-const autoLoad = (container: AwilixContainer) => ({
-    api: (path: string): void => {
+const createLoader = (container: AwilixContainer) => ({
+    loadApi: (path: string): void => {
         const autoRoutingOptions = { formatName: formatRoute };
         const api = loadDir(config.app.path, path);
         container.loadModules(api, autoRoutingOptions);
     },
-    hooks: (path: string): void => {
+    loadModule: (path: string, postfix: string): void => {
         const hooks = loadDir(config.app.path, path);
-        const hookOptions = { formatName: format('Hook') };
+        const hookOptions = { formatName: format(postfix) };
         container.loadModules([...hooks], hookOptions);
-    },
-    service: (path: string): void => {
-        const services = loadDir(config.app.path, path);
-        const serviceOptions = { formatName: format('Service') };
-        container.loadModules([...services], serviceOptions);
-    },
-    model: (path: string): void => {
-        const models = loadDir(config.app.path, path);
-        const modelOptions = { formatName: format('Model') };
-        container.loadModules([...models], modelOptions);
     },
 });
 
-export default { autoLoad, specifyScope };
+export default { createLoader, specifyScope };

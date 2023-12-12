@@ -1,43 +1,18 @@
 import node from './node';
 
-const base64 = (str: string): string => Buffer.from(str).toString('base64');
+const scryptPromise = node.util.promisify(node.crypto.scrypt);
 
-const sha256 = (str: string, salt: string): string => {
-    const hash = node.crypto.createHmac('sha256', salt);
-    hash.update(str);
-    return hash.digest('hex');
+const hashPassword = async (password: string) => {
+    const salt = node.crypto.randomBytes(8).toString('hex');
+    const derivedKey = await scryptPromise(password, salt, 32);
+    return salt + ':' + (derivedKey as Buffer).toString('hex');
 };
 
-class JWT {
-    constructor(
-        public headers = base64(
-            JSON.stringify(headers || { alg: 'HS256', typ: 'JWT' }),
-        ),
-    ) {}
+const verifyPassword = async (password: string, hash: string) => {
+    const [salt, key] = hash.split(':');
+    const keyBuffer = Buffer.from(key, 'hex');
+    const derivedKey = await scryptPromise(password, salt, 32);
+    return node.crypto.timingSafeEqual(keyBuffer, derivedKey as Buffer);
+};
 
-    sign(payload: object, secret: string) {
-        const encrypetedPayload = base64(JSON.stringify(payload));
-        const signature = sha256(
-            `${this.headers}.${encrypetedPayload}`,
-            secret,
-        );
-        return `${this.headers}.${encrypetedPayload}.${signature}`;
-    }
-
-    verify(token: string, secret: string) {
-        const [headers, payload, clientSignature] = token.split('.');
-        const encrypetedPayload = base64(JSON.stringify(payload));
-        const testigSignature = sha256(
-            `${headers}.${encrypetedPayload}`,
-            secret,
-        );
-        return testigSignature === clientSignature;
-    }
-
-    decode(token: string) {
-        const payload = token.split('.')[1];
-        return JSON.parse(base64(payload));
-    }
-}
-
-export default { base64, sha256, JWT };
+export default { hashPassword, verifyPassword };

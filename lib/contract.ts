@@ -1,7 +1,6 @@
 import type { Socket, IncomingMessage, ServerResponse } from './node';
 
 type TProtocol = 'http' | 'https' | 'ws' | 'wss' | 'tcp' | 'udp';
-type TAuthStrategy = 'jwt' | 'session';
 type TAccess = 'public' | 'private';
 
 export interface FHook {
@@ -13,12 +12,12 @@ export interface IHooks {
     after?: Array<FHook>;
 }
 
-export interface IMethod {
-    (payload?: object, id?: number): any;
+export interface IMethod<TPayload = any> {
+    (payload?: TPayload, id?: number): any;
 }
 
-export interface IEndpoint {
-    method: IMethod;
+export interface IEndpoint<TPayload = any> {
+    method: IMethod<TPayload>;
     hooks?: IHooks;
     access?: TAccess;
 }
@@ -35,17 +34,8 @@ export interface IConfig {
             pathPattern: string;
         };
     };
-    auth: {
-        strategy: TAuthStrategy;
-        secret: string;
-        tokens: {
-            access: {
-                expiresIn: '1m';
-            };
-            refresh: {
-                expiresIn: '1h';
-            };
-        };
+    chache: {
+        url: string;
     };
     db: {
         host: string;
@@ -53,6 +43,9 @@ export interface IConfig {
         database: string;
         user: string;
         password: string;
+    };
+    auth: {
+        secret: string;
     };
     log: {
         transport: {
@@ -64,16 +57,17 @@ export interface IConfig {
     };
 }
 
-export interface IEntity {
-    access?: TAccess;
-    hooks?: IHooks;
-    read?: IEndpoint | IMethod;
-    replace?: IEndpoint | IMethod;
-    create?: IEndpoint | IMethod;
-    update?: IEndpoint | IMethod;
-    info?: IEndpoint | IMethod;
-    delete?: IEndpoint | IMethod;
-}
+// export interface IController {
+//     access?: TAccess;
+//     hooks?: IHooks;
+//     read?: IEndpoint | IMethod;
+//     replace?: IEndpoint | IMethod;
+//     create?: IEndpoint | IMethod;
+//     update?: IEndpoint | IMethod;
+//     info?: IEndpoint | IMethod;
+//     delete?: IEndpoint | IMethod;
+//     [props: string]: any;
+// }
 
 export interface IApplication {
     config: IConfig;
