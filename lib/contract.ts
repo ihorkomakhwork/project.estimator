@@ -1,4 +1,4 @@
-import type { Socket, IncomingMessage, ServerResponse } from './node';
+import type { IncomingMessage, ServerResponse, ParsedUrlQuery } from './node';
 
 type TProtocol = 'http' | 'https' | 'ws' | 'wss' | 'tcp' | 'udp';
 type TAccess = 'public' | 'private';
@@ -81,10 +81,11 @@ export interface IServer {
     application: IApplication;
 }
 
-export type TSocket = Socket;
+export type TSocket = string;
 export type TProcedure = string;
 export type TPath = string;
 export type TId = number | undefined;
+export type TParams = ParsedUrlQuery | null;
 export type TPayload = object | null;
 
 export interface IClient {
@@ -99,19 +100,18 @@ export interface IClient {
     delete: (name: string) => void;
     send(): void;
 }
-export interface IReq {
+export interface IChannel {
     client: IClient;
-    socket: TSocket;
     procedure: TProcedure;
     path: TPath;
-    id?: TId;
-    payload?: TPayload;
+    id: TId;
+    params: TParams;
+    payload: TPayload;
+    socket: TSocket;
 }
 
-export type IReqArgs = [IClient, TSocket, TProcedure, TPath, TId, TPayload];
-
 export interface IReqHandler {
-    (req: IReq): any;
+    (channel: IChannel): any;
 }
 
 export interface ITransport {
@@ -122,7 +122,22 @@ export interface ITransports {
     [props: string]: ITransport;
 }
 
+export type IArgs = [TPayload, TId, TParams];
+
+export interface IArg {
+    method: IMethod;
+    name: string;
+    candidate: TPayload | TId | TParams;
+}
+
 export interface IURL {
-    path: string;
-    id?: string;
+    path: string | null;
+    id: number | undefined;
+    params: ParsedUrlQuery | null;
+}
+
+export interface ICtx {
+    id: TId;
+    params: TParams;
+    payload: TPayload;
 }

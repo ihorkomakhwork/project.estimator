@@ -4,11 +4,11 @@ import type {
     IApplication,
     IServer,
     FHook,
-    IReq,
     IEndpoint,
     IHooks,
-    IReqArgs,
     IMethod,
+    ICtx,
+    IChannel,
 } from './contract';
 
 class Chain {
@@ -41,49 +41,46 @@ export default class Server implements IServer {
         const transport = transports[protocol];
         // const hasAppHooks = this.application.has('appHooks');
         // if (hasAppHooks) this.appHooks = this.application.appHooks;
-        transport(port, this.reqHandler.bind(this));
-        this.application.logger.info(
-            `${protocol.toLocaleUpperCase()} Server listen port: ${port}`,
-        );
+        transport(port, this.request.bind(this));
+        const message = `${protocol.toUpperCase()} Server listen port: ${port}`;
+        this.application.logger.info(message);
     }
 
-    async reqHandler(req: IReq) {
+    async request(channel: IChannel) {
         try {
-            const args = [];
-            const data: IReqArgs = Object.values(req) as IReqArgs;
-            const [client, socket, procedure, path, id, payload] = data;
+            const { socket, client, procedure, path } = channel;
+            const { id, params, payload } = channel;
             this.application.createContext({ client });
-            this.application.logger.info({
-                socket: socket.remoteAddress,
-                path,
-                procedure,
-                id,
-                payload,
-            });
+            this.application.logger.info({ procedure, path, socket }, 'Req =>');
             const entity = this.getEntity(path);
             const endpoint = this.getEndpoint(entity, procedure);
-            if (payload) {
-                args.push(payload);
-                await this.preValidate(payload, entity, endpoint);
-            }
-            const hasId = this.hasMethodId(endpoint.method);
-            if (hasId) args.push(id);
-            const result = await endpoint.method.call(entity, ...args);
-            this.application.logger.info('result', result);
-            const code = result.code || 200;
-            const message = result.message || 'Ok';
-            if (!result.code) return { ...result, code, message };
-            return result;
+            if (payload) await this.processPrevHooks(payload, entity, endpoint);
+            const content = { id, params, payload };
+            const ctx = await this.validate(endpoint.method, content);
+            const result = await endpoint.method.call(entity, ctx);
+            const { code = 200, message = 'Ok' } = result;
+            this.application.logger.info({ result, code, message }, 'Res =>');
+            return { ...result, code, message };
         } catch (error) {
             return this.application.globalErrorFilter(error);
         }
     }
 
-    hasMethodId(method: IMethod): boolean {
-        const src = method.toString();
-        const signature = src.substring(0, src.indexOf(')'));
-        return signature.includes('id');
+    async validate(method: IMethod, ctx: ICtx): Promise<ICtx> {
+        for (const fieldName in ctx) {
+            const candidate = ctx[fieldName];
+            const hasArg = this.hasMethodField(method, fieldName);
+            const valid = (hasArg && candidate) || (!hasArg && !candidate);
+            if (!valid) {
+                const message = `Id, params, payload are defing by destructuring 
+                in method signature like this: method({id, params, payload})`;
+                this.application.logger.warn(message);
+                throw new exeption.api.BadRequest(`${fieldName} is unvalid!`);
+            }
+        }
+        return ctx;
     }
+
     getEntity(path: string) /* : IController */ {
         if (!this.application.has(path)) throw new exeption.api.NotFound();
         const entity /* : IController */ = this.application[path];
@@ -96,8 +93,13 @@ export default class Server implements IServer {
         if (isFunction) return { method: endpoint };
         return endpoint;
     }
-
-    async preValidate(
+    hasMethodField(method: IMethod, arg: string): boolean {
+        const src = method.toString();
+        const signature = src.substring(0, src.indexOf(')'));
+        const include = signature.includes(arg);
+        return include;
+    }
+    async processPrevHooks(
         payload,
         entity /*: IController*/,
         endpoint: IEndpoint,
