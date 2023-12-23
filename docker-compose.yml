@@ -15,7 +15,8 @@ services:
     depends_on:
       - postgres
       - redis
-
+    volumes:
+      - ./:/usr/src/app
   postgres:
     image: postgres:latest  
     container_name: postgres-container
