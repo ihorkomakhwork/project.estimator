@@ -1,8 +1,10 @@
 import app from './application';
 import lib from '../lib/lib';
 
-app.logger.info('Starting application...');
+await app.db.query('TRUNCATE TABLE users CASCADE;');
 
+app.logger.info('Starting application...');
+//throw new Error('test');
 new lib.Server(app);
 
 process.on('uncaughtException', (err) => {

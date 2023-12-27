@@ -30,4 +30,14 @@ class Unauthorized extends Exeption {
     }
 }
 
-export default { NotFound, BadRequest, Unauthorized };
+class Forbidden extends Exeption {
+    constructor(
+        public message: string = 'Forbidden',
+        public code: number = 403,
+        public options = {},
+    ) {
+        super(code, message, options);
+    }
+}
+
+export default { NotFound, BadRequest, Unauthorized, Forbidden };

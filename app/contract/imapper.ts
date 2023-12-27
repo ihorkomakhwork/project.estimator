@@ -5,7 +5,7 @@ import ITransaction from './itransaction';
 export default interface IMapper {
     serialization: {
         read: (result) => object;
-        readOne: (rows) => object;
+        readById: (rows) => object;
         create: (rows) => object;
         update: (rows) => object;
         delete: (rows) => object;

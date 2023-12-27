@@ -2,12 +2,11 @@ import { IURL } from 'lib/contract';
 import node from '../node';
 
 const CRUD = {
-    get: 'read',
-    put: 'replace',
-    post: 'create',
-    patch: 'update',
-    options: 'info',
-    delete: 'delete',
+    get: ['readById', 'read', 'readByParams'],
+    put: ['replace'],
+    post: ['create'],
+    patch: ['updateById', 'update', 'updateByParams'],
+    delete: ['deleteById', 'delete', 'deleteByParams'],
 };
 
 const MIME_TYPES = {

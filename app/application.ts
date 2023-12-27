@@ -43,12 +43,14 @@ container.register({
     schema: npm.awilix.asValue(ajv),
     globalErrorFilter: npm.awilix.asFunction(globalErrorFilter),
     dalErrorFilter: npm.awilix.asFunction(dalErrorFilter),
+    client: npm.awilix.asValue(null),
 });
 const loader = lib.util.di.createLoader(container);
 
 loader.loadModule('./schema', 'Schema');
 loader.loadModule('./repository/model', 'Entity');
-loader.loadModule('./service', 'Service');
+loader.loadModule('./service/application', 'Service');
+loader.loadModule('./service/domain', 'Service');
 loader.loadModule('./hook', 'Hooks');
 loader.loadApi('./api');
 
@@ -56,7 +58,5 @@ container.register({
     createContext: npm.awilix.asValue(lib.util.di.specifyScope(container)),
     has: npm.awilix.asValue(container.hasRegistration.bind(container)),
 });
-
-//console.log(container.registrations);
 
 export default container.cradle;

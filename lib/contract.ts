@@ -13,13 +13,17 @@ export interface IHooks {
 }
 
 export interface IMethod<TPayload = any> {
-    (payload?: TPayload, id?: number): any;
+    (payload?: TPayload, id?: number, params?: object): any;
 }
 
 export interface IEndpoint<TPayload = any> {
     method: IMethod<TPayload>;
     hooks?: IHooks;
     access?: TAccess;
+}
+
+export interface IEndpoints {
+    [index: number]: IEndpoint;
 }
 
 export interface IConfig {
@@ -82,7 +86,7 @@ export interface IServer {
 }
 
 export type TSocket = string;
-export type TProcedure = string;
+export type TProcedures = string[];
 export type TPath = string;
 export type TId = number | undefined;
 export type TParams = ParsedUrlQuery | null;
@@ -100,18 +104,22 @@ export interface IClient {
     delete: (name: string) => void;
     send(): void;
 }
-export interface IChannel {
-    client: IClient;
-    procedure: TProcedure;
-    path: TPath;
+export interface IData {
     id: TId;
     params: TParams;
     payload: TPayload;
+}
+
+export interface ICtx {
+    client: IClient;
+    procedures: TProcedures;
+    path: TPath;
+    data: IData;
     socket: TSocket;
 }
 
 export interface IReqHandler {
-    (channel: IChannel): any;
+    (ctx: ICtx): any;
 }
 
 export interface ITransport {
@@ -136,8 +144,7 @@ export interface IURL {
     params: ParsedUrlQuery | null;
 }
 
-export interface ICtx {
-    id: TId;
-    params: TParams;
-    payload: TPayload;
+export interface IRoute {
+    entity: object; // Rewrite to IController
+    endpoint: IEndpoint;
 }

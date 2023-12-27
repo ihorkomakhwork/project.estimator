@@ -5,7 +5,7 @@ import IMapper from '../contract/imapper';
 export default ({ source, dalErrorFilter }: IContainer): IMapper => ({
     serialization: {
         read: ({ rows }) => rows.map((row) => ({ ...row })),
-        readOne: ({ rows }) => rows[0],
+        readById: ({ rows }) => rows[0],
         create: ({ rows }) => rows,
         update: ({ rows }) => rows,
         delete: ({ rows }) => rows,

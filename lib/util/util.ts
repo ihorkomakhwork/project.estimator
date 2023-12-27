@@ -1,5 +1,5 @@
 import di from './di';
 import http from './http';
-import str from './str';
+import common from './common';
 
-export default { di, http, str };
+export default { di, http, common };

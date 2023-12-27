@@ -11,7 +11,7 @@ export default interface ICRUD<TRecord> {
 
     where(params: object): { where: string; values: any[] };
 
-    readOne(id: number, fields?: any[]): Promise<Array<TRecord>>;
+    readById(id: number, fields?: any[]): Promise<Array<TRecord>>;
 
     create(record: TRecord);
 

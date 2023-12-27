@@ -1,5 +1,4 @@
-// import { TMessage } from '../contract/tcommon';
-import { IUserDTO } from '../contract/idomain';
+import { IUserDTO } from '../../contract/idomain';
 
 export default ({ lib, npm, config, usersEntity, cache, logger }) => ({
     async register(candidate: IUserDTO): Promise<any> {
