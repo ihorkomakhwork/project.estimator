@@ -1,10 +1,8 @@
 import IContainer from 'app/contract/icrontainer';
-
-export default ({/*accessHook*/ client }: IContainer) => ({
-    // hooks: {
-    //     prev: [accessHook.resolveRoles(['admin'])],
-    // },
-
+import { IUserDAO } from 'app/contract/idomain';
+export default ({ accessHooks, repository }: IContainer) => ({
+    model: repository.model<IUserDAO>('users'),
+    hooks: { prev: [accessHooks.resolve(['admin'])] },
     async create({ payload }) {
         return { payload };
     },
@@ -16,7 +14,6 @@ export default ({/*accessHook*/ client }: IContainer) => ({
         return { id };
     },
     async read() {
-        console.log(client);
         return { read: true };
     },
 });

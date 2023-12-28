@@ -22,13 +22,13 @@ class Chain {
     clear() {
         this.hooks.clear();
     }
-    process(payload) {
+    async process(data: IData): Promise<void> {
         const chain = [];
         for (const hook of this.hooks) {
-            const pipe = hook(payload);
+            const pipe = hook(data);
             chain.push(pipe);
         }
-        Promise.all(chain);
+        await Promise.all(chain);
     }
 }
 
@@ -50,7 +50,6 @@ export default class Server implements IServer {
     constructor(
         public application: IApplication,
         public appHooks: IHooks = { prev: [], after: [] },
-        private chain: Chain = new Chain(),
     ) {
         const { protocol, port } = application.config.app;
         const transport = transports[protocol];
@@ -100,12 +99,13 @@ export default class Server implements IServer {
      * todo: add after hooks processing.
      */
     async processHooks(payload, entity, endpoint: IEndpoint): Promise<void> {
+        const chain = new Chain();
         const appHooks = this.appHooks?.prev ? this.appHooks.prev : [];
         const entityHooks = entity.hooks ? entity.hooks.prev : [];
         const endpointHooks = endpoint.hooks ? endpoint.hooks.prev : [];
         const hooks = [...appHooks, ...entityHooks, ...endpointHooks];
-        this.chain.add(hooks);
-        await this.chain.process(payload);
-        this.chain.clear();
+        chain.add(hooks);
+        await chain.process(payload);
+        chain.clear();
     }
 }
