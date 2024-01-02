@@ -1,19 +1,48 @@
 import IContainer from 'app/contract/icrontainer';
-import { IUserDAO } from 'app/contract/idomain';
-export default ({ accessHooks, repository }: IContainer) => ({
-    model: repository.model<IUserDAO>('users'),
-    hooks: { prev: [accessHooks.resolve(['admin'])] },
-    async create({ payload }) {
-        return { payload };
+
+export default ({
+    accessHooks,
+    validationHooks,
+    usersSchema,
+    usersEntity,
+}: IContainer) => ({
+    hooks: { prev: [accessHooks.allowRoles(['admin'])] },
+    create: {
+        hooks: {
+            prev: [validationHooks.validate(usersSchema.createDTO)],
+        },
+        async method({ payload }) {
+            await usersEntity.create(payload);
+            return { message: 'User created successfully', status: 201 };
+        },
     },
+
     async readByParams({ params }) {
-        console.log(params);
-        return { /* code: 200 , */ params };
+        const users = await usersEntity.read(params);
+        return { users };
     },
+
     async readById({ id }) {
-        return { id };
+        return await usersEntity.readById(id);
     },
+
     async read() {
-        return { read: true };
+        const users = await usersEntity.read();
+        return { users };
+    },
+
+    updateById: {
+        hooks: {
+            prev: [validationHooks.validate(usersSchema.updateDTO)],
+        },
+        async method({ id, payload }) {
+            await usersEntity.update(id, payload);
+            return { message: 'User updated successfully' };
+        },
+    },
+
+    async deleteById({ id }) {
+        await usersEntity.delete(id);
+        return { message: 'User deleted successfully' };
     },
 });
