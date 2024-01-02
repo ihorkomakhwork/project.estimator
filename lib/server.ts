@@ -12,7 +12,7 @@ import type {
     ICtx,
     TProcedures,
 } from './contract';
-
+//
 class Chain {
     constructor(private hooks: Set<FHook> = new Set()) {}
     add(hooks: Array<FHook>) {
@@ -23,12 +23,7 @@ class Chain {
         this.hooks.clear();
     }
     async process(data: IData): Promise<void> {
-        const chain = [];
-        for (const hook of this.hooks) {
-            const pipe = hook(data);
-            chain.push(pipe);
-        }
-        await Promise.all(chain);
+        for await (const hook of this.hooks) await hook(data);
     }
 }
 
