@@ -81,7 +81,7 @@ export default ({ db, lib, logger }): ISource => ({
 
             async create(record: TRecord) {
                 const keys = Object.keys(record).map(
-                    lib.util.common.camelToSnake
+                    lib.util.common.camelToSnake,
                 );
                 const nums = new Array(keys.length);
                 const data = new Array(keys.length);
@@ -97,15 +97,17 @@ export default ({ db, lib, logger }): ISource => ({
             },
 
             async update(
-                record: Partial<TRecord>,
                 id: number,
+                record: Partial<TRecord>,
             ): Promise<Array<TRecord>> {
-                const keys = Object.keys(record).map(lib.util.common.camelToSnake);
+                const keys = Object.keys(record).map(
+                    lib.util.common.camelToSnake,
+                );
                 const updates = new Array(keys.length);
                 const data = new Array(keys.length);
                 let i = 0;
                 keys.forEach((key) => {
-                    data[i] = record[key as string];
+                    data[i] = record[lib.util.common.snakeToCamel(key)];
                     updates[i] = `${key} = $${++i}`;
                 });
                 const delta = updates.join(', ');
