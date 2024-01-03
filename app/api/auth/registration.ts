@@ -5,7 +5,7 @@ export default ({ authService, validationHooks, usersSchema }) => ({
         },
         async method({ payload }) {
             const result = await authService.register(payload);
-            return { ...result, status: 201 };
+            return { ...result, code: 201 };
         },
     },
 });
