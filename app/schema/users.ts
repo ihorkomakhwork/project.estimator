@@ -19,6 +19,9 @@ const createUserDTO = {
                         sallary: { type: 'uint32' },
                         positionId: { type: 'uint32' },
                     },
+                    optionalProperties: {
+                        avaliable: { type: 'boolean' },
+                    },
                 },
                 customer: {
                     properties: {
@@ -57,6 +60,9 @@ const updateUserDTO = {
                     properties: {
                         sallary: { type: 'uint32' },
                         positionId: { type: 'uint32' },
+                    },
+                    optionalProperties: {
+                        avaliable: { type: 'boolean' },
                     },
                 },
                 customer: {

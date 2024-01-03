@@ -1,7 +1,7 @@
 import app from './application';
 import lib from '../lib/lib';
 
-await app.db.query('TRUNCATE TABLE users CASCADE;');
+//await app.db.query('TRUNCATE TABLE users CASCADE;');
 
 app.logger.info('Starting application...');
 new lib.Server(app);

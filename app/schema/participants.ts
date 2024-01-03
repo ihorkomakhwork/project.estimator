@@ -2,8 +2,8 @@ import { JTDDataType } from 'ajv/dist/jtd';
 
 const participant = {
     properties: {
-        employeeId: { type: 'uint8' },
-        estimationId: { type: 'uint8' },
+        employeeId: { type: 'uint32' },
+        estimationId: { type: 'uint32' },
     },
     additionalProperties: false,
 };
