@@ -18,33 +18,33 @@ INSERT INTO Users (name, last_name, middle_name, email, password, role, country,
 VALUES ('Sarah', 'Davis', 'Wilson', 'sarahdavis@example.com', 'password', 'employee', 'USA', 'Seattle', '1212 Cedar St', '555-555-5560');
 
 -- Seed data for Positions table
-INSERT INTO Positions (type, level, name)
+INSERT INTO Positions (area, level, specialization)
 VALUES ('manager', 'senior', 'project-manager');
 
-INSERT INTO Positions (type, level, name)
+INSERT INTO Positions (area, level, specialization)
 VALUES ('developer', 'middle', 'backend');
 
-INSERT INTO Positions (type, level, name)
+INSERT INTO Positions (area, level, specialization)
 VALUES ('developer', 'junior', 'frontend');
 
-INSERT INTO Positions (type, level, name)
+INSERT INTO Positions (area, level, specialization)
 VALUES ('manager', 'junior', 'project-manager');
 
-INSERT INTO Positions (type, level, name)
+INSERT INTO Positions (area, level, specialization)
 VALUES ('developer', 'senior', 'full-stack');
 
-INSERT INTO Positions (type, level, name)
+INSERT INTO Positions (area, level, specialization)
 VALUES ('manager', 'middle', 'project-manager');
 
 -- Seed data for Customers table
-INSERT INTO Customers (user_id, license)
-VALUES (1, 'pe');
+INSERT INTO Customers (user_id, license, iban)
+VALUES (1, 'pe', 'US12345678901234567890');
 
-INSERT INTO Customers (user_id, license)
-VALUES (3, 'le');
+INSERT INTO Customers (user_id, license, iban)
+VALUES (3, 'le', 'US09876543210987654321');
 
-INSERT INTO Customers (user_id, license)
-VALUES (5, 'pe');
+INSERT INTO Customers (user_id, license, iban)
+VALUES (5, 'pe', 'US12345678901234567890');
 
 -- Seed data for Employees table
 INSERT INTO Employees (user_id, avaliable, sallary, position_id)

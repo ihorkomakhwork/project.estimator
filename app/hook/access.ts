@@ -1,4 +1,12 @@
-export default ({ lib, usersEntity, positionsEntity, client, npm, cache }) => ({
+export default ({
+    lib,
+    usersEntity,
+    employeesEntity,
+    positionsEntity,
+    client,
+    npm,
+    cache,
+}) => ({
     allowRoles(roles: string[]) {
         return async () => {
             const token = client.cookie['token'];
@@ -11,14 +19,20 @@ export default ({ lib, usersEntity, positionsEntity, client, npm, cache }) => ({
             if (!allowed) throw new lib.exeption.api.Forbidden();
         };
     },
-    allowPositionType(types: string[]) {
+    allowPositionAreas(areas: string[]) {
         return async () => {
             const token = client.cookie['token'];
             const email = await cache.get(token);
             if (!email) throw new lib.exeption.api.Unauthorized();
-            const { id } = await usersEntity.readByEmail(email);
-            const { type } = await positionsEntity.read({ userId: id });
-            const allowed = types.includes(type);
+            const user = await usersEntity.readByEmail(email);
+            const isEmployee = user.role === 'employee';
+            const valid = user && isEmployee;
+            if (!valid) throw new lib.exeption.api.Forbidden();
+            const { positionId } = await employeesEntity.read({
+                userId: user.id,
+            });
+            const position = await positionsEntity.readById(positionId);
+            const allowed = areas.includes(position.area);
             if (!allowed) throw new lib.exeption.api.Forbidden();
         };
     },

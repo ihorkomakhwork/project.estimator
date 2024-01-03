@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS Users (
 
 CREATE TABLE IF NOT EXISTS Positions (
     id SERIAL PRIMARY KEY,
-    type position_type NOT NULL,
+    area position_type NOT NULL,
     level position_level NOT NULL,
-    name specialization_type NOT NULL,
+    specialization specialization_type NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS Positions (
 CREATE TABLE IF NOT EXISTS Customers (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
+    iban VARCHAR(255) NOT NULL,
     license license_type NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),

@@ -1,19 +1,20 @@
-import IContainer from 'app/contract/icrontainer';
-
 export default ({
     accessHooks,
     validationHooks,
     usersSchema,
     usersEntity,
-}: IContainer) => ({
+    lib,
+}) => ({
     hooks: { prev: [accessHooks.allowRoles(['admin'])] },
     create: {
         hooks: {
             prev: [validationHooks.validate(usersSchema.createDTO)],
         },
         async method({ payload }) {
-            await usersEntity.create(payload);
-            return { message: 'User created successfully', status: 201 };
+            const { password } = payload;
+            const hash = await lib.security.hashPassword(password);
+            await usersEntity.create({ ...payload, password: hash });
+            return { message: 'User created successfully', code: 201 };
         },
     },
 
@@ -23,7 +24,9 @@ export default ({
     },
 
     async readById({ id }) {
-        return await usersEntity.readById(id);
+        const user = await usersEntity.readById(id);
+        if (!user) throw new lib.exeption.domain.NotFound('User');
+        return { user };
     },
 
     async read() {
@@ -42,6 +45,7 @@ export default ({
     },
 
     async deleteById({ id }) {
+        const user = await usersEntity.readById(id);
         await usersEntity.delete(id);
         return { message: 'User deleted successfully' };
     },
