@@ -1,17 +1,35 @@
 import { JTDDataType } from 'ajv/dist/jtd';
 
-const estmation = {
+const createEstimationDTO = {
     properties: {
-        title: { type: 'string' },
-        responsibleEmployeeId: { type: 'uint32' },
-        proposalId: { type: 'uint32' },
-        state: {
-            enum: ['holding', 'processing', 'rejected', 'resolve'],
-        },
-        message: { type: 'string' },
+        name: { type: 'string' },
+        description: { type: 'string' },
+        price: { type: 'uint32' },
+        customerId: { type: 'uint32' },
+        employeeId: { type: 'uint32' },
+        status: { type: 'string' },
     },
     additionalProperties: false,
-};
+} as const;
 
-export type TEstmation = JTDDataType<typeof estmation>;
-export default ({ schema }) => schema.compile(estmation);
+const updateEstimationDTO = {
+    optionalProperties: {
+        name: { type: 'string' },
+        description: { type: 'string' },
+        price: { type: 'uint32' },
+        customerId: { type: 'uint32' },
+        employeeId: { type: 'uint32' },
+        status: { type: 'string' },
+    },
+    additionalProperties: false,
+} as const;
+
+export type TCreateEstimationDTO = JTDDataType<typeof createEstimationDTO>;
+export type TEstimationDAO = JTDDataType<typeof createEstimationDTO>;
+export type TUpdateEstimationDTO = JTDDataType<typeof updateEstimationDTO>;
+
+export default ({ schema }) => ({
+    createDTO: schema.compile(createEstimationDTO),
+    updateDTO: schema.compile(updateEstimationDTO),
+    dao: schema.compile(createEstimationDTO),
+});

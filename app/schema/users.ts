@@ -16,7 +16,7 @@ const createUserDTO = {
             mapping: {
                 employee: {
                     properties: {
-                        sallary: { type: 'uint32' },
+                        salary: { type: 'uint32' },
                         positionId: { type: 'uint32' },
                     },
                     optionalProperties: {
@@ -58,7 +58,7 @@ const updateUserDTO = {
             mapping: {
                 employee: {
                     properties: {
-                        sallary: { type: 'uint32' },
+                        salary: { type: 'uint32' },
                         positionId: { type: 'uint32' },
                     },
                     optionalProperties: {

@@ -1,4 +1,4 @@
-import { ICreateUserDTO } from '../../contract/idomain';
+import { ICreateUserDTO } from '../../contract/domain';
 
 export default ({ lib, npm, config, usersEntity, cache, logger }) => ({
     async register(candidate: ICreateUserDTO): Promise<any> {
