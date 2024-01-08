@@ -3,7 +3,7 @@ import type {
     ICreateUserDTO,
     ICustomerDAO,
     IEmployeeDAO,
-} from '../../contract/idomain';
+} from '../../contract/domain';
 import IContainer from '../../contract/icrontainer';
 
 export default ({ repository }: IContainer) => ({
@@ -26,7 +26,7 @@ export default ({ repository }: IContainer) => ({
                 const employee = {
                     userId: createdUser.id,
                     positionId: user.role.positionId,
-                    sallary: user.role.sallary,
+                    salary: user.role.salary,
                 };
                 await trx.employees.create(employee);
             } else if (user.role.type === 'admin') return;

@@ -3,12 +3,9 @@ import { JTDDataType } from 'ajv/dist/jtd';
 const createTaskDTO = {
     properties: {
         title: { type: 'string' },
-        customerId: { type: 'uint32' },
-        projecEstimationId: { type: 'uint32' },
-        estimate: {
-            type: 'string',
-            metadata: { format: 'interval' },
-        },
+        employeeId: { type: 'uint32' },
+        projectEstimationId: { type: 'uint32' },
+        estimate: { type: 'uint32' },
         description: { type: 'string' },
     },
     additionalProperties: false,
@@ -17,12 +14,9 @@ const createTaskDTO = {
 const updateTaskDTO = {
     optionalProperties: {
         title: { type: 'string' },
-        customerId: { type: 'uint32' },
-        projecEstimationId: { type: 'uint32' },
-        estimate: {
-            type: 'string',
-            metadata: { format: 'interval' },
-        },
+        employeeId: { type: 'uint32' },
+        projectEstimationId: { type: 'uint32' },
+        estimate: { type: 'uint32' },
         description: { type: 'string' },
     },
     additionalProperties: false,
@@ -30,8 +24,9 @@ const updateTaskDTO = {
 
 export type TCreateTaskDTO = JTDDataType<typeof createTaskDTO>;
 export type TUpdateTaskDTO = JTDDataType<typeof updateTaskDTO>;
-
+export type TTaskDAO = JTDDataType<typeof createTaskDTO>;
 export default ({ schema }) => ({
     createDTO: schema.compile(createTaskDTO),
     updateDTO: schema.compile(updateTaskDTO),
+    dao: schema.compile(createTaskDTO),
 });

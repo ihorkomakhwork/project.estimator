@@ -1,6 +1,6 @@
-import type { ITask } from '../../contract/idomain';
+import type { ITaskDAO } from '../../contract/domain';
 import IContainer from '../../contract/icrontainer';
 
 export default ({ repository }: IContainer) => ({
-    ...repository.model<ITask>('tasks'),
+    ...repository.model<ITaskDAO>('tasks'),
 });

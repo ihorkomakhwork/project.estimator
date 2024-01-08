@@ -11,7 +11,6 @@ export default ({ logger, lib }) =>
         if (code in codes) {
             logger.error(error);
             const Exeption = codes[code];
-            console.log(Exeption);
             throw new Exeption();
         }
         throw error;

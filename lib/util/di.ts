@@ -22,16 +22,23 @@ const loadDir = (base: string, namespacePath: string): [string] => [
     ),
 ];
 
-const formatRoute = (name: string, discriptor: ModuleDescriptor): any => {
+/**
+ *TODO:
+ * Refactoring
+ */
+const formatRoute = (fileName: string, discriptor: ModuleDescriptor): any => {
     const tmp = discriptor.path.split('/');
-    const namespace = tmp.indexOf('api');
-    const endpoint = tmp.indexOf(name + config.app.ext);
-    const unsuccess = namespace === -1 || endpoint === -1;
+    const namespaceIndex = tmp.indexOf('api');
+    const endpointIndex = tmp.indexOf(fileName + config.app.ext);
+    const unsuccess = namespaceIndex === -1 || endpointIndex === -1;
     if (unsuccess) throw new Error('Can not find namespace or endpoint');
+    const isBaseEndpoint = fileName === 'index';
+    if (isBaseEndpoint) tmp.pop();
     const route = tmp
-        .slice(namespace, endpoint + 1)
+        .slice(namespaceIndex, endpointIndex + 1)
         .join('/')
         .replace(config.app.ext, '');
+    console.log(route);
     return route;
 };
 

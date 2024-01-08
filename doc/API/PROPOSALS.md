@@ -50,28 +50,32 @@ Content-Type: application/json
       "title": "Some automation APP",
       "customerId": 123,
       "state": "resolve",
-      "content": "Some discription of ammazing app"
+      "content": "Some discription of ammazing app",
+      "budget": 1000
     },
     { 
       "id": 2,
       "title": "Pizzeria web-site",
       "customerId": 123,
       "state": "estimating",
-      "content": "Some discription of ammazing app"
+      "content": "Some discription of ammazing app",
+      "budget": 1000
     },
     {
       "id": 3,
       "title": "Some bot",
       "customerId": 20, 
       "state": "reject",
-      "content": "Some discription of ammazing app"
+      "content": "Some discription of ammazing app",
+      "budget": 1000
     },
     {
       "id": 4, 
       "title": "Some integration",
       "customerId": 20,
       "state": "processing",
-      "content": "Some discription of ammazing app"
+      "content": "Some discription of ammazing app",
+      "budget": 1000
     }
   ],
   }
@@ -107,7 +111,8 @@ Content-Type: application/json
     "title": "Some automation APP",
     "customerId": 123,
     "state": "resolve",
-    "content": "Some discription of ammazing app"
+    "content": "Some discription of ammazing app",
+    "budget": 1000
   }
 }
 ```
@@ -131,7 +136,9 @@ Cookie: access_token=<access_token>
   "title": "Some automation APP",
   "customerId": 123,
   "state": "pending",
-  "content": "Some discription of ammazing app"
+  "content": "Some discription of ammazing app",
+  "budget": 1000
+
 }
 ```
 
@@ -150,7 +157,8 @@ Content-Type: application/json
     "title": "Some automation APP",
     "customerId": 123,
     "state": "resolve",
-    "content": "Some discription of ammazing app"
+    "content": "Some discription of ammazing app",
+    "budget": 1000
   }
 }
 ```
@@ -184,7 +192,8 @@ Content-Type: application/json
     "title": "Some automation APP",
     "customerId": 123,
     "state": "resolve",
-    "content": "Some discription of ammazing app"
+    "content": "Some discription of ammazing app",
+    "budget": 1000
   }
 }
 ```
@@ -217,7 +226,8 @@ Content-Type: application/json
     "title": "Some automation APP",
     "customerId": 123,
     "state": "resolve",
-    "content": "Some discription of ammazing app"
+    "content": "Some discription of ammazing app",
+    "budget": 1000
   }
 }
 ```
