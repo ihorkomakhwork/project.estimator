@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS Employees (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     avaliable BOOLEAN NOT NULL DEFAULT TRUE,
-    sallary MONEY NOT NULL,
+    salary INTEGER NOT NULL,
     position_id INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -63,7 +63,7 @@ CREATE TABLE Proposals (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    budget MONEY NOT NULL,
+    budget INTEGER NOT NULL,
     customer_id INTEGER NOT NULL,
     state proposal_state NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS ProjectsEstimations (
     id SERIAL PRIMARY KEY,
     responsible_employee_id INTEGER NOT NULL,
     proposal_id INTEGER NOT NULL,
-    cost MONEY,
+    cost INTEGER,
     state estimation_state NOT NULL,
     message TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -86,9 +86,10 @@ CREATE TABLE IF NOT EXISTS ProjectsEstimations (
 
 CREATE TABLE IF NOT EXISTS Tasks (
     id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
     project_estimation_id INTEGER NOT NULL,
     employee_id INTEGER NOT NULL,
-    estimate INTERVAL,
+    estimate INTEGER NOT NULL,
     description TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -96,7 +97,7 @@ CREATE TABLE IF NOT EXISTS Tasks (
     FOREIGN KEY (employee_id) REFERENCES Employees(id)
 );
 
-CREATE TABLE IF NOT EXISTS InvolvedEmployees (
+CREATE TABLE IF NOT EXISTS Participants (
     id SERIAL PRIMARY KEY,
     project_estimation_id INTEGER NOT NULL,
     employee_id INTEGER NOT NULL,

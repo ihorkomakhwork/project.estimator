@@ -47,13 +47,13 @@ INSERT INTO Customers (user_id, license, iban)
 VALUES (5, 'pe', 'US12345678901234567890');
 
 -- Seed data for Employees table
-INSERT INTO Employees (user_id, avaliable, sallary, position_id)
+INSERT INTO Employees (user_id, avaliable, salary, position_id)
 VALUES (2, true, 5000, 2);
 
-INSERT INTO Employees (user_id, avaliable, sallary, position_id)
+INSERT INTO Employees (user_id, avaliable, salary, position_id)
 VALUES (4, true, 6000, 5);
 
-INSERT INTO Employees (user_id, avaliable, sallary, position_id)
+INSERT INTO Employees (user_id, avaliable, salary, position_id)
 VALUES (6, true, 7000, 1);
 
 -- Seed data for Proposals table
@@ -77,21 +77,21 @@ INSERT INTO ProjectsEstimations (responsible_employee_id, proposal_id, cost, sta
 VALUES (3, 3, 18000, 'processing', 'We can complete this project within 4 months');
 
 -- Seed data for Tasks table
-INSERT INTO Tasks (project_estimation_id, employee_id, estimate, description)
-VALUES (1, 3, '10 hours', 'Design homepage layout');
+INSERT INTO Tasks (project_estimation_id, title ,employee_id, estimate, description)
+VALUES (1,'Lorem ipsum' ,3, 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
 
-INSERT INTO Tasks (project_estimation_id, employee_id, estimate, description)
-VALUES (2, 2, '60 hours', 'Develop mobile app UI');
+INSERT INTO Tasks (project_estimation_id, title ,employee_id, estimate, description)
+VALUES (2,'Layout2', 2, 60, 'Create mobile app layout');
 
-INSERT INTO Tasks (project_estimation_id, employee_id, estimate, description)
-VALUES (3, 1, '20 hours', 'Create online store layout');
+INSERT INTO Tasks (project_estimation_id, title ,employee_id, estimate, description)
+VALUES (3, 'Layout 1', 1, 20, 'Create online store layout');
 
 -- Seed data for InvolvedEmployees table
-INSERT INTO InvolvedEmployees (project_estimation_id, employee_id)
+INSERT INTO Participants (project_estimation_id, employee_id)
 VALUES (1, 1);
 
-INSERT INTO InvolvedEmployees (project_estimation_id, employee_id)
+INSERT INTO Participants (project_estimation_id, employee_id)
 VALUES (2, 2);
 
-INSERT INTO InvolvedEmployees (project_estimation_id, employee_id)
+INSERT INTO Participants (project_estimation_id, employee_id)
 VALUES (3, 3);
