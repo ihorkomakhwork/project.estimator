@@ -20,8 +20,8 @@ export default ({
     },
 
     async readByParams({ params }) {
-        const users = await proposalsEntity.read(params);
-        return { users };
+        const proposals = await proposalsEntity.read(params);
+        return { proposals };
     },
 
     async readById({ id }) {
@@ -29,8 +29,8 @@ export default ({
     },
 
     async read() {
-        const users = await proposalsEntity.read();
-        return { users };
+        const proposals = await proposalsEntity.read();
+        return { proposals };
     },
 
     updateById: {

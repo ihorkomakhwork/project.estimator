@@ -5,10 +5,13 @@ export default ({
     usersEntity,
     lib,
 }) => ({
-    hooks: { prev: [accessHooks.allowRoles(['admin'])] },
+    hooks: { prev: [accessHooks.allowRoles(['admin', 'employee'])] },
     create: {
         hooks: {
-            prev: [validationHooks.validate(usersSchema.createDTO)],
+            prev: [
+                accessHooks.allowRoles(['admin']),
+                validationHooks.validate(usersSchema.createDTO),
+            ],
         },
         async method({ payload }) {
             const { password } = payload;
@@ -36,7 +39,10 @@ export default ({
 
     updateById: {
         hooks: {
-            prev: [validationHooks.validate(usersSchema.updateDTO)],
+            prev: [
+                validationHooks.validate(usersSchema.updateDTO),
+                accessHooks.allowRoles(['admin']),
+            ],
         },
         async method({ id, payload }) {
             await usersEntity.update(id, payload);
@@ -44,9 +50,13 @@ export default ({
         },
     },
 
-    async deleteById({ id }) {
-        const user = await usersEntity.readById(id);
-        await usersEntity.delete(id);
-        return { message: 'User deleted successfully' };
+    deleteById: {
+        hooks: {
+            prev: [accessHooks.allowRoles(['admin'])],
+        },
+        async method({ id }) {
+            await usersEntity.delete(id);
+            return { message: 'User deleted successfully' };
+        },
     },
 });

@@ -1,7 +1,15 @@
-export default ({ authService, validationHooks, usersSchema }) => ({
+export default ({
+    authService,
+    validationHooks,
+    usersSchema,
+    accessHooks,
+}) => ({
     create: {
         hooks: {
-            prev: [validationHooks.validate(usersSchema.createDTO)],
+            prev: [
+                validationHooks.validate(usersSchema.createDTO),
+                accessHooks.allowRoles(['customer', 'employee']),
+            ],
         },
         async method({ payload }) {
             const result = await authService.register(payload);

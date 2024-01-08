@@ -1,4 +1,4 @@
-import { ILoginDTO } from '../../contract/idomain';
+import { ILoginDTO } from '../../contract/domain';
 
 export default ({ authService, validationHooks, authSchema, client }) => ({
     create: {

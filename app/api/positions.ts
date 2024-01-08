@@ -23,8 +23,8 @@ export default ({
     },
 
     async readByParams({ params }) {
-        const users = await positionsEntity.read(params);
-        return { users };
+        const positions = await positionsEntity.read(params);
+        return { positions };
     },
 
     async readById({ id }) {
@@ -32,8 +32,8 @@ export default ({
     },
 
     async read() {
-        const users = await positionsEntity.read();
-        return { users };
+        const positions = await positionsEntity.read();
+        return { positions };
     },
 
     updateById: {
