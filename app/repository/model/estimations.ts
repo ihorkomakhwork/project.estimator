@@ -1,6 +1,6 @@
-import type { IEstimation } from '../../contract/idomain';
+import type { IEstimationDAO } from '../../contract/domain';
 import IContainer from '../../contract/icrontainer';
 
 export default ({ repository }: IContainer) => ({
-    ...repository.model<IEstimation>('estimations'),
+    ...repository.model<IEstimationDAO>('projectsEstimations'),
 });

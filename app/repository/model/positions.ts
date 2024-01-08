@@ -1,4 +1,4 @@
-import type { IPositionDAO } from '../../contract/idomain';
+import type { IPositionDAO } from '../../contract/domain';
 import IContainer from '../../contract/icrontainer';
 
 export default ({ repository }: IContainer) => ({
