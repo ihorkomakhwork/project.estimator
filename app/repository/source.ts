@@ -22,7 +22,7 @@ export default ({ db, lib, logger }): ISource => ({
                 const values = Object.values(params);
                 const conditions = new Array(keys.length);
                 const callback = (key, i) =>
-                    (conditions[i] = `${lib.util.str.camelToSnake(
+                    (conditions[i] = `${lib.util.common.camelToSnake(
                         key,
                     )} = $${++i}`);
                 keys.forEach(callback);
@@ -34,14 +34,14 @@ export default ({ db, lib, logger }): ISource => ({
                 const sql = `SELECT column_name FROM information_schema.columns WHERE table_name = $1`;
                 const res = await this.query(sql, [this.table]);
                 return res.rows.map(({ column_name }) =>
-                    lib.util.str.snakeToCamel(column_name),
+                    lib.util.common.snakeToCamel(column_name),
                 );
             },
 
             createAlias(fields: any[]): string {
                 return fields
                     .map((alias) => {
-                        const name = lib.util.str.camelToSnake(alias);
+                        const name = lib.util.common.camelToSnake(alias);
                         return `${name} AS "${alias}"`;
                     })
                     .join(', ');
@@ -66,7 +66,7 @@ export default ({ db, lib, logger }): ISource => ({
                 return this.query(sql, values);
             },
 
-            async readOne(
+            async readById(
                 id: number,
                 fields: any[] = ['*'],
             ): Promise<Array<TRecord>> {
@@ -80,11 +80,13 @@ export default ({ db, lib, logger }): ISource => ({
             },
 
             async create(record: TRecord) {
-                const keys = Object.keys(record).map(lib.util.str.camelToSnake);
+                const keys = Object.keys(record).map(
+                    lib.util.common.camelToSnake,
+                );
                 const nums = new Array(keys.length);
                 const data = new Array(keys.length);
                 keys.forEach((key, i) => {
-                    data[i] = record[lib.util.str.snakeToCamel(key)];
+                    data[i] = record[lib.util.common.snakeToCamel(key)];
                     nums[i] = `$${++i}`;
                 });
                 const fields = `"${keys.join('", "')}"`;
@@ -95,15 +97,17 @@ export default ({ db, lib, logger }): ISource => ({
             },
 
             async update(
-                record: Partial<TRecord>,
                 id: number,
+                record: Partial<TRecord>,
             ): Promise<Array<TRecord>> {
-                const keys = Object.keys(record).map(lib.util.str.camelToSnake);
+                const keys = Object.keys(record).map(
+                    lib.util.common.camelToSnake,
+                );
                 const updates = new Array(keys.length);
                 const data = new Array(keys.length);
                 let i = 0;
                 keys.forEach((key) => {
-                    data[i] = record[key as string];
+                    data[i] = record[lib.util.common.snakeToCamel(key)];
                     updates[i] = `${key} = $${++i}`;
                 });
                 const delta = updates.join(', ');

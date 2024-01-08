@@ -1,21 +1,42 @@
-import type { TUserDTO } from '../schema/users';
-import type { TUserDAO } from '../schema/users';
-import type { TEmployee } from '../schema/employees';
-import type { TCustomer } from '../schema/customers';
+import type { TCreateUserDTO, TUpdateUserDTO, TUserDAO } from '../schema/users';
 import type { TParticipant } from '../schema/participants';
 import type { TEstmation } from '../schema/estimations';
-import type { TPosition } from '../schema/positions';
-import type { TTask } from '../schema/tasks';
-import type { TProposal } from '../schema/proposals';
 import type { TLoginDTO } from '../schema/auth';
+import type {
+    TCreateEmployeeDTO,
+    TUpdateEmployeeDTO,
+    TEmployeeDAO,
+} from '../schema/employees';
+import type {
+    TCreateProposalDTO,
+    TUpdateProposalDTO,
+} from '../schema/proposals';
+import type {
+    TCreatePositionDTO,
+    TUpdatePositionDTO,
+    TPositionDAO,
+} from '../schema/positions';
+import type {
+    TCreateCustomerDTO,
+    TUpdateCustomerDTO,
+    TCustomerDAO,
+} from '../schema/customers';
 
-export interface IUserDTO extends TUserDTO {}
+export interface ICreateUserDTO extends TCreateUserDTO {}
+export interface IUpdateUserDTO extends TUpdateUserDTO {}
 export interface IUserDAO extends TUserDAO {}
-export interface IEmployee extends TEmployee {}
-export interface ICustomer extends TCustomer {}
+export interface ICreateEmployeeDTO extends TCreateEmployeeDTO {}
+export interface IUpdateEmployeeDTO extends TUpdateEmployeeDTO {}
+export interface IEmployeeDAO extends TEmployeeDAO {}
+export interface ICustomerDAO extends TCustomerDAO {}
+export interface ICreateCustomerDTO extends TCreateCustomerDTO {}
+export interface IUpdateCustomerDTO extends TUpdateCustomerDTO {}
 export interface IParticipant extends TParticipant {}
 export interface IEstimation extends TEstmation {}
-export interface IPosition extends TPosition {}
-export interface ITask extends TTask {}
-export interface IProposal extends TProposal {}
+export interface ICreatePositionDTO extends TCreatePositionDTO {}
+export interface IUpdatePositionDTO extends TUpdatePositionDTO {}
+export interface IPositionDAO extends TPositionDAO {}
 export interface ILoginDTO extends TLoginDTO {}
+export interface ICreateProposalDTO extends TCreateProposalDTO {}
+export interface IUpdateProposalDTO extends TUpdateProposalDTO {}
+export interface IProposalDAO extends TCreateProposalDTO {}

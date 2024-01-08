@@ -1,8 +1,19 @@
 import { JTDDataType } from 'ajv/dist/jtd';
 
-const customer = {
+const createCustomerDTO = {
     properties: {
-        userId: { type: 'uint8' },
+        userId: { type: 'uint32' },
+        type: { type: 'string' },
+        iban: { type: 'string' },
+        license: {
+            enum: ['pe', 'le'],
+        },
+    },
+    additionalProperties: false,
+};
+const updateCustomerDTO = {
+    optionalProperties: {
+        userId: { type: 'uint32' },
         type: { type: 'string' },
         iban: { type: 'string' },
         license: {
@@ -12,6 +23,12 @@ const customer = {
     additionalProperties: false,
 };
 
-export type TCustomer = JTDDataType<typeof customer>;
+export type TCreateCustomerDTO = JTDDataType<typeof createCustomerDTO>;
+export type TUpdateCustomerDTO = JTDDataType<typeof updateCustomerDTO>;
+export type TCustomerDAO = TCreateCustomerDTO;
 
-export default ({ schema }) => schema.compile(customer);
+export default ({ schema }) => ({
+    dao: schema.compile(createCustomerDTO),
+    createDTO: schema.compile(createCustomerDTO),
+    updateDTO: schema.compile(updateCustomerDTO),
+});

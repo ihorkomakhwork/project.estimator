@@ -1,8 +1,7 @@
-// import { TMessage } from '../contract/tcommon';
-import { IUserDTO } from '../contract/idomain';
+import { ICreateUserDTO } from '../../contract/idomain';
 
 export default ({ lib, npm, config, usersEntity, cache, logger }) => ({
-    async register(candidate: IUserDTO): Promise<any> {
+    async register(candidate: ICreateUserDTO): Promise<any> {
         const { email, password } = candidate;
         const exists = await usersEntity.readByEmail(email);
         if (exists) throw new lib.exeption.domain.AlreadyExists('User');

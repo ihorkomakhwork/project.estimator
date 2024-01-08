@@ -3,8 +3,8 @@ import { JTDDataType } from 'ajv/dist/jtd';
 const estmation = {
     properties: {
         title: { type: 'string' },
-        responsibleEmployeeId: { type: 'uint8' },
-        proposalId: { type: 'uint8' },
+        responsibleEmployeeId: { type: 'uint32' },
+        proposalId: { type: 'uint32' },
         state: {
             enum: ['holding', 'processing', 'rejected', 'resolve'],
         },

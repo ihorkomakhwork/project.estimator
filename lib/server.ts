@@ -1,16 +1,18 @@
 import exeption from './exeption/exeption';
 import transports from './transport';
+import util from './util/util';
 import type {
     IApplication,
     IServer,
     FHook,
-    IReq,
     IEndpoint,
     IHooks,
-    IReqArgs,
-    IMethod,
+    IRoute,
+    IData,
+    ICtx,
+    TProcedures,
 } from './contract';
-
+//
 class Chain {
     constructor(private hooks: Set<FHook> = new Set()) {}
     add(hooks: Array<FHook>) {
@@ -20,94 +22,85 @@ class Chain {
     clear() {
         this.hooks.clear();
     }
-    async process(payload) {
-        const chain = [];
-        for (const hook of this.hooks) {
-            const pipe = hook(payload);
-            chain.push(pipe);
-        }
-        console.log(chain);
-        Promise.all(chain);
+    async process(data: IData): Promise<void> {
+        for await (const hook of this.hooks) await hook(data);
     }
 }
+
+const PROCEDURE_PARAMS_REQUIRMENTS = {
+    readById: ['id'],
+    read: [],
+    readByParams: ['params'],
+    replace: ['id', 'payload'],
+    create: ['payload'],
+    updateById: ['id', 'payload'],
+    update: ['payload'],
+    updateByParams: ['params', 'payload'],
+    deleteById: ['id'],
+    delete: [],
+    deleteByParams: ['params'],
+};
 
 export default class Server implements IServer {
     constructor(
         public application: IApplication,
         public appHooks: IHooks = { prev: [], after: [] },
-        private chain: Chain = new Chain(),
     ) {
         const { protocol, port } = application.config.app;
         const transport = transports[protocol];
-        // const hasAppHooks = this.application.has('appHooks');
-        // if (hasAppHooks) this.appHooks = this.application.appHooks;
-        transport(port, this.reqHandler.bind(this));
-        this.application.logger.info(
-            `${protocol.toLocaleUpperCase()} Server listen port: ${port}`,
-        );
+        transport(port, this.request.bind(this));
+        const message = `${protocol.toUpperCase()} Server listen port: ${port}`;
+        this.application.logger.info(message);
     }
 
-    async reqHandler(req: IReq) {
+    async request(ctx: ICtx) {
         try {
-            const args = [];
-            const data: IReqArgs = Object.values(req) as IReqArgs;
-            const [client, socket, procedure, path, id, payload] = data;
+            const { socket, client, procedures, path, data } = ctx;
             this.application.createContext({ client });
-            this.application.logger.info({
-                socket: socket.remoteAddress,
-                path,
-                procedure,
-                id,
-                payload,
-            });
-            const entity = this.getEntity(path);
-            const endpoint = this.getEndpoint(entity, procedure);
-            if (payload) {
-                args.push(payload);
-                await this.preValidate(payload, entity, endpoint);
-            }
-            const hasId = this.hasMethodId(endpoint.method);
-            if (hasId) args.push(id);
-            const result = await endpoint.method.call(entity, ...args);
-            this.application.logger.info('result', result);
-            const code = result.code || 200;
-            const message = result.message || 'Ok';
-            if (!result.code) return { ...result, code, message };
-            return result;
+            const infoObj = { procedures, path, socket };
+            this.application.logger.info(infoObj, 'Request: ');
+            const route = this.route(path, procedures, data);
+            await this.processHooks(data, route.entity, route.endpoint);
+            const result = await route.endpoint.method(data);
+            const { code = 200, message = 'Ok' } = result;
+            const responce = { ...result, code, message };
+            this.application.logger.info(responce, 'Responce: ');
+            return responce;
         } catch (error) {
             return this.application.globalErrorFilter(error);
         }
     }
 
-    hasMethodId(method: IMethod): boolean {
-        const src = method.toString();
-        const signature = src.substring(0, src.indexOf(')'));
-        return signature.includes('id');
-    }
-    getEntity(path: string) /* : IController */ {
-        if (!this.application.has(path)) throw new exeption.api.NotFound();
-        const entity /* : IController */ = this.application[path];
-        return entity;
-    }
-    getEndpoint(entity /* : IController */, method: string): IEndpoint {
-        const endpoint = entity[method];
-        if (!endpoint) throw new exeption.api.NotFound('Not Found', 404);
-        const isFunction = typeof endpoint === 'function';
-        if (isFunction) return { method: endpoint };
-        return endpoint;
+    route(path: string, procedures: TProcedures, data: IData): IRoute {
+        if (!procedures) throw new exeption.api.NotFound();
+        const dataKeys = util.common.truelyObjKeys(data);
+        for (const procedureName of procedures) {
+            const requirement = PROCEDURE_PARAMS_REQUIRMENTS[procedureName];
+            const match = util.common.compareArrs(requirement, dataKeys);
+            if (!match) continue;
+            const entity = this.application[path];
+            if (!entity) throw new exeption.api.NotFound();
+            let prop = entity[procedureName];
+            if (!prop) throw new exeption.api.NotFound();
+            const isFunction = typeof prop === 'function';
+            if (isFunction) prop = { method: prop.bind(entity) };
+            const result = { entity, endpoint: prop };
+            return result;
+        }
+        throw new exeption.api.NotFound();
     }
 
-    async preValidate(
-        payload,
-        entity /*: IController*/,
-        endpoint: IEndpoint,
-    ): Promise<void> {
+    /**
+     * todo: add after hooks processing.
+     */
+    async processHooks(payload, entity, endpoint: IEndpoint): Promise<void> {
+        const chain = new Chain();
         const appHooks = this.appHooks?.prev ? this.appHooks.prev : [];
         const entityHooks = entity.hooks ? entity.hooks.prev : [];
         const endpointHooks = endpoint.hooks ? endpoint.hooks.prev : [];
         const hooks = [...appHooks, ...entityHooks, ...endpointHooks];
-        this.chain.add(hooks);
-        await this.chain.process(payload);
-        this.chain.clear();
+        chain.add(hooks);
+        await chain.process(payload);
+        chain.clear();
     }
 }

@@ -5,7 +5,8 @@ export default ({ authService, validationHooks, authSchema, client }) => ({
         hooks: {
             prev: [validationHooks.validate(authSchema.login)],
         },
-        async method({ email, password }: ILoginDTO) {
+        async method({ payload }) {
+            const { email, password } = payload as ILoginDTO;
             const { message, token } = await authService.login(email, password);
             client.set('token', token);
             client.send();

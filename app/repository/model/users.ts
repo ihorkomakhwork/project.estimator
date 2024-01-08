@@ -1,26 +1,25 @@
 import type {
     IUserDAO,
-    IUserDTO,
-    ICustomer,
-    IEmployee,
+    ICreateUserDTO,
+    ICustomerDAO,
+    IEmployeeDAO,
 } from '../../contract/idomain';
 import IContainer from '../../contract/icrontainer';
 
 export default ({ repository }: IContainer) => ({
     ...repository.model<IUserDAO>('users'),
-    async create(user: IUserDTO) {
+    async create(user: ICreateUserDTO) {
         const users = repository.model<IUserDAO>('users');
-        const employees = repository.model<IEmployee>('employees');
-        const customers = repository.model<ICustomer>('customers');
-        const { role } = user;
-        const { type } = role;
+        const employees = repository.model<IEmployeeDAO>('employees');
+        const customers = repository.model<ICustomerDAO>('customers');
         const callback = async (trx) => {
-            await trx.users.create({ ...user, role: type });
+            await trx.users.create({ ...user, role: user.role.type });
             const [createdUser] = await trx.users.read({ email: user.email });
             if (user.role.type === 'customer') {
                 const customer = {
                     userId: createdUser.id,
                     license: user.role.license,
+                    iban: user.role.iban,
                 };
                 await trx.customers.create(customer);
             } else if (user.role.type === 'employee') {

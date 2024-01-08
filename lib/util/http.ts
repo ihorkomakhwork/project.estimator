@@ -1,12 +1,12 @@
-import type { IURL } from '../contract';
+import { IURL } from 'lib/contract';
+import node from '../node';
 
 const CRUD = {
-    get: 'read',
-    put: 'replace',
-    post: 'create',
-    patch: 'update',
-    options: 'info',
-    delete: 'delete',
+    get: ['readById', 'read', 'readByParams'],
+    put: ['replace'],
+    post: ['create'],
+    patch: ['updateById', 'update', 'updateByParams'],
+    delete: ['deleteById', 'delete', 'deleteByParams'],
 };
 
 const MIME_TYPES = {
@@ -36,14 +36,38 @@ const receiveArgs = async (req) => {
     return JSON.parse(data);
 };
 
+const isEmptyObject = (obj: object) => !Object.keys(obj).length;
+
+const deleteChar = (str: string, char: string) => str.replace(char, '');
+
+const pathGetId = (pathname: string): number | undefined => {
+    const entities = pathname.split('/');
+    const idIndex = entities.length - 1;
+    const lastEntity = entities[idIndex];
+    const id = parseInt(lastEntity, 10);
+    const isId = !isNaN(id);
+    if (isId) return id;
+    return;
+};
+
+const cutSlash = (str: string): string => {
+    const firs = str[0];
+    const last = str[str.length - 1];
+    if (firs === '/') str = str.slice(1);
+    if (last === '/') str = str.slice(0, -1);
+    return str;
+};
+
+//TO REFACTORING
 const parseUrl = (url: string): IURL => {
-    const dirs = url.split('/').filter((part) => part !== '');
-    const isId = url.indexOf(':') !== -1;
-    if (isId) {
-        const id = dirs.pop().replace(':', '');
-        return { path: dirs.join('/'), id };
-    }
-    return { path: dirs.join('/'), id: undefined };
+    const { pathname, search } = new node.url.URL(url);
+    let path = cutSlash(pathname);
+    const queryStr = search.slice(1);
+    let params = node.querystring.parse(queryStr);
+    if (isEmptyObject(params)) params = null;
+    const id = pathGetId(path);
+    if (id) path = deleteChar(path, `/${id}`);
+    return { path, id, params };
 };
 
 export default {

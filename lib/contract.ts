@@ -1,4 +1,4 @@
-import type { Socket, IncomingMessage, ServerResponse } from './node';
+import type { IncomingMessage, ServerResponse, ParsedUrlQuery } from './node';
 
 type TProtocol = 'http' | 'https' | 'ws' | 'wss' | 'tcp' | 'udp';
 type TAccess = 'public' | 'private';
@@ -13,13 +13,17 @@ export interface IHooks {
 }
 
 export interface IMethod<TPayload = any> {
-    (payload?: TPayload, id?: number): any;
+    (payload?: TPayload, id?: number, params?: object): any;
 }
 
 export interface IEndpoint<TPayload = any> {
     method: IMethod<TPayload>;
     hooks?: IHooks;
     access?: TAccess;
+}
+
+export interface IEndpoints {
+    [index: number]: IEndpoint;
 }
 
 export interface IConfig {
@@ -81,10 +85,11 @@ export interface IServer {
     application: IApplication;
 }
 
-export type TSocket = Socket;
-export type TProcedure = string;
+export type TSocket = string;
+export type TProcedures = string[];
 export type TPath = string;
 export type TId = number | undefined;
+export type TParams = ParsedUrlQuery | null;
 export type TPayload = object | null;
 
 export interface IClient {
@@ -99,19 +104,22 @@ export interface IClient {
     delete: (name: string) => void;
     send(): void;
 }
-export interface IReq {
-    client: IClient;
-    socket: TSocket;
-    procedure: TProcedure;
-    path: TPath;
-    id?: TId;
-    payload?: TPayload;
+export interface IData {
+    id: TId;
+    params: TParams;
+    payload: TPayload;
 }
 
-export type IReqArgs = [IClient, TSocket, TProcedure, TPath, TId, TPayload];
+export interface ICtx {
+    client: IClient;
+    procedures: TProcedures;
+    path: TPath;
+    data: IData;
+    socket: TSocket;
+}
 
 export interface IReqHandler {
-    (req: IReq): any;
+    (ctx: ICtx): any;
 }
 
 export interface ITransport {
@@ -122,7 +130,21 @@ export interface ITransports {
     [props: string]: ITransport;
 }
 
+export type IArgs = [TPayload, TId, TParams];
+
+export interface IArg {
+    method: IMethod;
+    name: string;
+    candidate: TPayload | TId | TParams;
+}
+
 export interface IURL {
-    path: string;
-    id?: string;
+    path: string | null;
+    id: number | undefined;
+    params: ParsedUrlQuery | null;
+}
+
+export interface IRoute {
+    entity: object; // Rewrite to IController
+    endpoint: IEndpoint;
 }

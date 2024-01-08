@@ -1,10 +1,10 @@
 import { JTDDataType } from 'ajv/dist/jtd';
 
-const employee = {
+const createEmployeeDTO = {
     properties: {
-        userId: { type: 'uint8' },
-        salary: { type: 'uint8' },
-        positionId: { type: 'uint8' },
+        userId: { type: 'uint32' },
+        salary: { type: 'uint32' },
+        positionId: { type: 'uint32' },
     },
     //additionalProperties: false,
     optionalProperties: {
@@ -12,6 +12,22 @@ const employee = {
     },
 };
 
-export type TEmployee = JTDDataType<typeof employee>;
+const updateEmployeeDTO = {
+    optionalProperties: {
+        userId: { type: 'uint32' },
+        salary: { type: 'uint32' },
+        positionId: { type: 'uint32' },
+        avaliable: { type: 'boolean' },
+    },
+    additionalProperties: false,
+};
 
-export default ({ schema }) => schema.compile(employee);
+export type TCreateEmployeeDTO = JTDDataType<typeof createEmployeeDTO>;
+export type TUpdateEmployeeDTO = JTDDataType<typeof updateEmployeeDTO>;
+export type TEmployeeDAO = TCreateEmployeeDTO;
+
+export default ({ schema }) => ({
+    dao: schema.compile(createEmployeeDTO),
+    createDTO: schema.compile(createEmployeeDTO),
+    updateDTO: schema.compile(updateEmployeeDTO),
+});

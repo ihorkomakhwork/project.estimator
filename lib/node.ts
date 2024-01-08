@@ -6,6 +6,8 @@ import * as url from 'node:url';
 import * as fsp from 'node:fs/promises';
 import * as events from 'node:events';
 import * as assert from 'node:assert';
+import * as querystring from 'node:querystring';
+import * as os from 'node:os';
 
 const node = {
     process,
@@ -17,6 +19,8 @@ const node = {
     url,
     events,
     assert,
+    querystring,
+    os,
 };
 
 Object.freeze(node);
@@ -24,3 +28,4 @@ Object.freeze(node);
 export default node;
 export type { Socket } from 'node:net';
 export type { IncomingMessage, ServerResponse } from 'node:http';
+export type { ParsedUrlQuery } from 'node:querystring';

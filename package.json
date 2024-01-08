@@ -11,13 +11,12 @@
     "node": ">=20.8.1"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json", 
     "build:watch": "nodemon --watch \"./**/*.ts\" --exec \"npm run build\" --ext \".ts\"",
     "format": "prettier --write \"./**/*.ts\"",
     "start": "npm run build | node dist/app/main.js",
     "start:dev": "npx tsx ./app/main.ts",
-    "start:script": "npx tsx ./script/setupDB.ts",
-    "start:debug": "node --import tsx --nolazy --inspect=0.0.0.0:9229 app/main.ts",
+    "start:debug": "npx tsx watch --inspect=0.0.0.0:9229 --nolazy app/main.ts",
     "start:prod": "node dist/app/main.js",
     "lint": "eslint \"{app,apps,lib,test}/**/*.ts\" --fix",
     "test": "",
@@ -47,6 +46,7 @@
     "pg": "^8.11.3",
     "pino": "^8.16.1",
     "pino-pretty": "^10.2.3",
-    "redis": "^4.6.10"
+    "redis": "^4.6.10",
+    "tsx": "^4.7.0"
   }
 }
