@@ -50,6 +50,9 @@ export interface IConfig {
     };
     auth: {
         secret: string;
+        expire: number;
+        tokenLength: number;
+        sessionKey: string;
     };
     log: {
         transport: {
@@ -96,11 +99,11 @@ export interface IClient {
     req: IncomingMessage;
     res: ServerResponse;
     host: string;
-    cookie: object;
+    cookie: Map<string, string>;
     preparedCookie: any[];
-    cookieExpire: string;
     read: () => void;
-    set: (name: string, val) => void;
+    get: (name: string) => any;
+    set: (name: string, val, expire: number) => void;
     delete: (name: string) => void;
     send(): void;
 }
@@ -145,6 +148,6 @@ export interface IURL {
 }
 
 export interface IRoute {
-    entity: object; // Rewrite to IController
+    entity: object;
     endpoint: IEndpoint;
 }

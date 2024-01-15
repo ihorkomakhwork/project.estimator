@@ -1,7 +1,6 @@
 export default ({ tasksEntity, employeesEntity, estimationsService }) => ({
     manHours: async (employerId, estimate) => {
         const employee = await employeesEntity.readById(employerId);
-        console.debug('employee', employee);
         return employee.salary * estimate;
     },
     async calculate(projectEstimationId: number) {

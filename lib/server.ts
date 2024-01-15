@@ -12,7 +12,7 @@ import type {
     ICtx,
     TProcedures,
 } from './contract';
-//
+
 class Chain {
     constructor(private hooks: Set<FHook> = new Set()) {}
     add(hooks: Array<FHook>) {

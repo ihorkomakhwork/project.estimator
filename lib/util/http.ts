@@ -70,10 +70,18 @@ const parseUrl = (url: string): IURL => {
     return { path, id, params };
 };
 
+const parseHost = (host) => {
+    if (!host) return 'no-host-name-in-http-headers';
+    const portOffset = host.indexOf(':');
+    if (portOffset > -1) host = host.substr(0, portOffset);
+    return host;
+};
+
 export default {
     CRUD,
     MIME_TYPES,
     HEADERS,
     receiveArgs,
     parseUrl,
+    parseHost,
 };

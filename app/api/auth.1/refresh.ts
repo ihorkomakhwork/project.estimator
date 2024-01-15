@@ -1,7 +1,7 @@
-export default ({ authService, client }) => ({
+export default ({ authJWTService, client }) => ({
     async read() {
         const oldToken = client.cookie['token'];
-        const { message, token } = await authService.refresh(oldToken);
+        const { message, token } = await authJWTService.refresh(oldToken);
         client.set('token', token);
         client.send();
         return { message };
