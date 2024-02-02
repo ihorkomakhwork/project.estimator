@@ -38,7 +38,6 @@ const formatRoute = (fileName: string, discriptor: ModuleDescriptor): any => {
         .slice(namespaceIndex, endpointIndex + 1)
         .join('/')
         .replace(config.app.ext, '');
-    console.log(route);
     return route;
 };
 

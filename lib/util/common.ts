@@ -15,4 +15,17 @@ const snakeToCamel = (str: string): string => {
     return str.replace(/(_\w)/g, (letter) => letter[1].toUpperCase());
 };
 
-export default { compareArrs, truelyObjKeys, camelToSnake, snakeToCamel };
+const calculateExpiringUTC = (timeInMilliseconds) => {
+    const currentDate = new Date();
+    const expireDate = new Date(currentDate.getTime() + timeInMilliseconds);
+    const formattedExpireDate = expireDate.toUTCString();
+    return formattedExpireDate;
+};
+
+export default {
+    compareArrs,
+    truelyObjKeys,
+    camelToSnake,
+    snakeToCamel,
+    calculateExpiringUTC,
+};

@@ -33,6 +33,9 @@ const config: IConfig = {
     },
     auth: {
         secret: 'secret',
+        expire: 100000000000,
+        tokenLength: 64,
+        sessionKey: 'auth-token',
     },
 };
 
