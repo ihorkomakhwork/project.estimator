@@ -4,7 +4,7 @@ export default ({ authJWTService, validationHooks, usersSchema }) => ({
             prev: [validationHooks.validate(usersSchema.createDTO)],
         },
         async method({ payload }) {
-            const result = await authJWTService.register(payload);
+            const result = await authLocalService.register(payload);
             return { ...result, code: 201 };
         },
     },
